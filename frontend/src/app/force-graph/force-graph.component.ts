@@ -34,21 +34,51 @@ export class ForceGraphComponent implements OnInit {
     { id: 'u2', name: 'User 2', popularity: 80,  genre: 'pop'  },
     { id: 'u3', name: 'User 3', popularity: 200, genre: 'jazz' },
     { id: 'u4', name: 'User 4', popularity: 50,  genre: 'rock' },
+    { id: 'u5', name: 'User 5', popularity: 150, genre: 'rock' },
+    { id: 'u6', name: 'User 6', popularity: 90,  genre: 'pop'  },
+    { id: 'u7', name: 'User 7', popularity: 60,  genre: 'jazz' },
+    { id: 'u8', name: 'User 8', popularity: 110, genre: 'rock' },
+    { id: 'u9', name: 'User 9', popularity: 70,  genre: 'pop'  },
+    { id: 'u10', name: 'User 10', popularity: 130, genre: 'jazz' },
     // attribute or “concept” nodes
     { id: 'genreRock',  name: 'Rock',        popularity: 0, genre: 'rock' },
     { id: 'genrePop',   name: 'Pop',         popularity: 0, genre: 'pop'  },
     { id: 'genreJazz',  name: 'Jazz',        popularity: 0, genre: 'jazz' },
-    { id: 'podcastFan', name: 'Podcast Fan', popularity: 0, genre: 'podcast' }
+    { id: 'podcastFan', name: 'Podcast Fan', popularity: 0, genre: 'podcast' },
+
+    { id: 'genreClassical', name: 'Classical', popularity: 0, genre: 'classical' },
+    { id: 'genreHipHop', name: 'Hip Hop', popularity: 0, genre: 'hiphop' },
+    { id: 'genreElectronic', name: 'Electronic', popularity: 0, genre: 'electronic' }
+    
   ];
 
   links: GraphLink[] = [
     { source: 'u1', target: 'genreRock',  value: 1 },
+    { source: 'u1', target: 'genrePop',  value: 1 },
+    { source: 'u1', target: 'genreJazz',  value: 1 },
+    { source: 'u1', target: 'podcastFan', value: 1 },
     { source: 'u2', target: 'genrePop',   value: 1 },
     { source: 'u3', target: 'genrePop',   value: 1 },
     { source: 'u3', target: 'podcastFan', value: 1 },
     { source: 'u4', target: 'genreJazz',  value: 1 },
+    { source: 'u4', target: 'genreRock',  value: 1 },
+    { source: 'u4', target: 'genrePop',  value: 1 },
+    { source: 'u4', target: 'podcastFan',  value: 1 },
+    { source: 'u4', target: 'genreJazz',  value: 1 },
+    { source: 'u5', target: 'genreRock',  value: 1 },
+    { source: 'u5', target: 'genrePop',  value: 1 },
+    { source: 'u5', target: 'genreJazz',  value: 1 },
+    { source: 'u5', target: 'podcastFan',  value: 1 },
+    { source: 'u6', target: 'genrePop',  value: 1 },
+    { source: 'u6', target: 'genreJazz',  value: 1 },
+    { source: 'u6', target: 'podcastFan',  value: 1 },
+    { source: 'u7', target: 'genreHipHop',  value: 1 },
+    { source: 'u7', target: 'podcastFan',  value: 1 },
     // A direct link between users 2 and 3 if they share some similarity
-    { source: 'u2', target: 'u3',         value: 0.5 }
+    { source: 'u2', target: 'u3',         value: 0.5 },
+    { source: 'u10', target: 'genreJazz',  value: 1 },
+    { source: 'u10', target: 'genreRock',  value: 1 },
+
   ];
 
   constructor() {}
@@ -67,6 +97,8 @@ export class ForceGraphComponent implements OnInit {
       case 'pop':      return '#3498db'; // blue
       case 'jazz':     return '#9b59b6'; // purple
       case 'podcast':  return '#2ecc71'; // green
+      case 'hiphop':   return '#2ecc71'; // green
+      case 'electronic': return '#2ecc71'; // green
       default:         return '#7f8c8d'; // gray fallback
     }
   }
