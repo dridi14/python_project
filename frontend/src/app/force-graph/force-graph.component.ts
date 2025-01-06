@@ -6,7 +6,8 @@ import * as echarts from 'echarts';
 interface GraphNode {
   id: string;
   name: string;
-  // Tu peux ajouter d’autres propriétés, ex. group, plan, genre, etc.
+  popularity?: number;
+  genre?: string;
 }
 
 interface GraphLink {
@@ -24,100 +25,118 @@ interface GraphLink {
   styleUrl: './force-graph.component.css'
 })
 
-  export class ForceGraphComponent implements OnInit {
-    @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef<HTMLDivElement>;
-  
-    // Données fictives pour l’exemple
-    nodes: GraphNode[] = [
-      { id: 'u1', name: 'User 1' },
-      { id: 'u2', name: 'User 2' },
-      { id: 'u3', name: 'User 3' },
-      { id: 'u4', name: 'User 4' },
-      { id: 'genreRock', name: 'Rock' },
-      { id: 'genrePop', name: 'Pop' },
-      { id: 'genreJazz', name: 'Jazz' },
-      { id: 'podcastFan', name: 'Podcast' }
-    ];
-  
-    links: GraphLink[] = [
-      // On relie les utilisateurs à leurs genres préférés (exemple)
-      { source: 'u1', target: 'genreRock', value: 1 },
-      { source: 'u2', target: 'genrePop', value: 1 },
-      { source: 'u3', target: 'genrePop', value: 1 },
-      { source: 'u3', target: 'podcastFan', value: 1 },
-      { source: 'u4', target: 'genreJazz', value: 1 },
-      // On peut relier user 2 et user 3 s’ils partagent bcp d’attributs
-      { source: 'u2', target: 'u3', value: 0.5 }
-    ];
-  
-    constructor() {}
-  
-    ngOnInit(): void {
-      this.initChart();
-    }
-  
-    private initChart(): void {
-      // Initialiser ECharts sur la div
-      const chart = echarts.init(this.chartContainer.nativeElement);
-  
-      // Construire l’option ECharts (type: 'graph' + layout: 'force')
-      const option: echarts.EChartsOption = {
-        title: {
-          text: 'Force-Directed Graph (Spotify Example)',
-          left: 'center'
-        },
-        tooltip: {
-          formatter: (params: any) => {
-            // Personnaliser le tooltip
-            if (params.dataType === 'node') {
-              return `<b>${params.data.name}</b>`;
-            } else if (params.dataType === 'edge') {
-              return `Lien: ${params.data.source} → ${params.data.target}`;
-            }
-            return '';
-          }
-        },
-        // backgroundColor: '#fafafa', // optionnel
-        series: [
-          {
-            type: 'graph',
-            layout: 'force',
-            // Animation des liens
-            force: {
-              repulsion: 80, // distance entre les nœuds (à ajuster)
-              edgeLength: 100, // longueur des liens (à ajuster)
-              gravity: 0.1 // attraction au centre, à ajuster
-            },
-            roam: true, // autorise zoom & déplacement de la scène
-            data: this.nodes.map(n => {
-              return {
-                id: n.id,
-                name: n.name,
-                // symbolSize: personnalise la taille du nœud
-                symbolSize: 40,
-                // On peut colorer en fonction d’un attribut, ex. group
-                itemStyle: {
-                  color: '#6ea9db' // Couleur de base (modifiable par groupe)
-                }
-              };
-            }),
-            edges: this.links.map(l => {
-              return {
-                source: l.source,
-                target: l.target,
-                value: l.value || 1,
-                // lineStyle: { ... } pour personnaliser l’aspect du lien
-              };
-            })
-          }
-        ]
-      };
-  
-      // Appliquer l’option
-      chart.setOption(option);
-      // Ajustement responsif
-      window.addEventListener('resize', () => {
-        chart.resize();
-      });
+export class ForceGraphComponent implements OnInit {
+  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef<HTMLDivElement>;
+
+  // Example data with popularity and genre
+  nodes: GraphNode[] = [
+    { id: 'u1', name: 'User 1', popularity: 120, genre: 'rock' },
+    { id: 'u2', name: 'User 2', popularity: 80,  genre: 'pop'  },
+    { id: 'u3', name: 'User 3', popularity: 200, genre: 'jazz' },
+    { id: 'u4', name: 'User 4', popularity: 50,  genre: 'rock' },
+    // attribute or “concept” nodes
+    { id: 'genreRock',  name: 'Rock',        popularity: 0, genre: 'rock' },
+    { id: 'genrePop',   name: 'Pop',         popularity: 0, genre: 'pop'  },
+    { id: 'genreJazz',  name: 'Jazz',        popularity: 0, genre: 'jazz' },
+    { id: 'podcastFan', name: 'Podcast Fan', popularity: 0, genre: 'podcast' }
+  ];
+
+  links: GraphLink[] = [
+    { source: 'u1', target: 'genreRock',  value: 1 },
+    { source: 'u2', target: 'genrePop',   value: 1 },
+    { source: 'u3', target: 'genrePop',   value: 1 },
+    { source: 'u3', target: 'podcastFan', value: 1 },
+    { source: 'u4', target: 'genreJazz',  value: 1 },
+    // A direct link between users 2 and 3 if they share some similarity
+    { source: 'u2', target: 'u3',         value: 0.5 }
+  ];
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.initChart();
+  }
+
+  /**
+   * Map a genre or group to a color.
+   */
+  private getColorByGenre(genre: string | undefined): string {
+    if (!genre) return '#cccccc';
+    switch (genre.toLowerCase()) {
+      case 'rock':     return '#e74c3c'; // red
+      case 'pop':      return '#3498db'; // blue
+      case 'jazz':     return '#9b59b6'; // purple
+      case 'podcast':  return '#2ecc71'; // green
+      default:         return '#7f8c8d'; // gray fallback
     }
   }
+
+  /**
+   * Convert popularity into a symbolSize (node radius).
+   */
+  private getSymbolSize(popularity: number | undefined): number {
+    if (!popularity) return 20; // default baseline
+    const minSize = 20;
+    const maxSize = 80;
+    const scaledSize = minSize + (popularity / 200) * (maxSize - minSize);
+    return Math.round(scaledSize);
+  }
+
+  private initChart(): void {
+    const chart = echarts.init(this.chartContainer.nativeElement);
+
+    const option: echarts.EChartsOption = {
+      title: {
+        text: 'Force-Directed Graph (Spotify Example)',
+        left: 'center'
+      },
+      tooltip: {
+        formatter: (params: any) => {
+          if (params.dataType === 'node') {
+            // Show name + popularity (or any other info)
+            const node = params.data;
+            return `<b>${node.name}</b><br/>
+                    Popularity: ${node.popularity || 0}<br/>
+                    Genre: ${node.genre || 'n/a'}`;
+          } else if (params.dataType === 'edge') {
+            return `Lien: ${params.data.source} → ${params.data.target}`;
+          }
+          return '';
+        }
+      },
+      series: [
+        {
+          type: 'graph',
+          layout: 'force',
+          force: {
+            repulsion: 80,
+            edgeLength: 100,
+            gravity: 0.1
+          },
+          roam: true,
+          data: this.nodes.map(n => ({
+            id: n.id,
+            name: n.name,
+            popularity: n.popularity, // can access in tooltip
+            genre: n.genre,           // can access in tooltip
+            symbolSize: this.getSymbolSize(n.popularity),
+            itemStyle: {
+              color: this.getColorByGenre(n.genre)
+            }
+          })),
+          edges: this.links.map(l => ({
+            source: l.source,
+            target: l.target,
+            value: l.value || 1
+          }))
+        }
+      ]
+    };
+
+    chart.setOption(option);
+
+    window.addEventListener('resize', () => {
+      chart.resize();
+    });
+  }
+}
