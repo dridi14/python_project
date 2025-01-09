@@ -45,11 +45,9 @@ export class ForceGraphComponent implements OnInit {
     { id: 'genrePop',   name: 'Pop',         popularity: 0, genre: 'pop'  },
     { id: 'genreJazz',  name: 'Jazz',        popularity: 0, genre: 'jazz' },
     { id: 'podcastFan', name: 'Podcast Fan', popularity: 0, genre: 'podcast' },
-
     { id: 'genreClassical', name: 'Classical', popularity: 0, genre: 'classical' },
     { id: 'genreHipHop', name: 'Hip Hop', popularity: 0, genre: 'hiphop' },
     { id: 'genreElectronic', name: 'Electronic', popularity: 0, genre: 'electronic' }
-    
   ];
 
   links: GraphLink[] = [
