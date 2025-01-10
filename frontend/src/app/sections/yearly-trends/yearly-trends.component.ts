@@ -60,7 +60,7 @@ export class YearlyTrendsComponent implements OnInit {
     this.spotifyService.getPopularityTrends().subscribe(
       (data: any) => {
         this.years = data.map((item: any) => item.year);
-        this.averagePopularity = data.map((item: any) => item.popularity);
+        this.averagePopularity = data.map((item: any) => item.popularity.toFixed(2));
 
         // Find the year with the highest popularity
         const maxPopularity = Math.max(...this.averagePopularity);

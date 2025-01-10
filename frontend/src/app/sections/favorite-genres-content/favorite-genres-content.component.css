@@ -22,3 +22,53 @@ canvas {
   width: 100% !important;
   height: auto !important;
 }
+
+.filters {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.filters label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-right: 0.5rem;
+}
+
+.filters select {
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.filters select:hover,
+.filters select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .filters label {
+    margin-right: 0;
+  }
+
+  .filters select {
+    width: 100%;
+  }
+}

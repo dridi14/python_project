@@ -1,6 +1,24 @@
 <app-menu [currentPageIndex]="5"></app-menu>
 <div class="container">
   <h1>Favorite Genres by Demographics</h1>
+
+  <!-- Filters Section -->
+  <div class="filters">
+    <label for="genderFilter">Gender:</label>
+    <select id="genderFilter" [(ngModel)]="selectedGender" (change)="applyFilters()">
+      <option value="">All</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <label for="genreFilter">Genre:</label>
+    <select id="genreFilter" [(ngModel)]="selectedGenre" (change)="applyFilters()">
+      <option value="">All</option>
+      <option *ngFor="let genre of availableGenres" [value]="genre">{{ genre }}</option>
+    </select>
+  </div>
+
+  <!-- Chart Section -->
   <div class="chart-section">
     <canvas id="combinedChart"></canvas>
   </div>
