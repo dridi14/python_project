@@ -35,7 +35,7 @@ export class FavoriteGenresContentComponent extends BaseComponent implements OnI
   }
 
   override navigate(direction: 'up' | 'down') {
-    if (direction === 'down') {
+    if (direction === 'up') {
       this.router.navigate(['/spotify-usage-insights']);
     }
   }
