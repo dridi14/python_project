@@ -13,6 +13,7 @@ h1 {
 
 .chart-section {
   width: 90%;
+  max-width: 80vw;
   margin: 20px 0;
 }
 
