@@ -1,0 +1,16 @@
+<div class="menu-container">
+  <div class="line"></div>
+  <ul class="menu-list">
+    <li
+      *ngFor="let page of pages; let i = index"
+      [class.active]="i === currentPageIndex"
+      (click)="navigateToPage(i)"
+    >
+      <div class="menu-point">
+        <div class="submenu" *ngIf="i !== currentPageIndex">
+          {{ page.name }}
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

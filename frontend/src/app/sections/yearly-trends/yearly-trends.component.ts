@@ -5,13 +5,15 @@ import { SpotifyService } from '../../services/spotify.service';
 import { Chart, registerables } from 'chart.js';
 import { Router, RouterModule } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { MenuComponent } from '../../menu/menu.component';
+
 
 @Component({
   selector: 'app-yearly-trends',
   standalone: true,
   templateUrl: './yearly-trends.component.html',
   styleUrls: ['./yearly-trends.component.css'],
-  imports: [CommonModule, HttpClientModule, RouterModule],
+  imports: [CommonModule, HttpClientModule, RouterModule, MenuComponent],
   providers: [SpotifyService],
 })
 export class YearlyTrendsComponent implements OnInit {
@@ -31,9 +33,26 @@ export class YearlyTrendsComponent implements OnInit {
   @HostListener('window:wheel', ['$event'])
   onWheel(event: WheelEvent) {
     if (event.deltaY > 0) {
-      this.router.navigate(['/track-characteristics']);
+      this.navigate('down');
     } else if (event.deltaY < 0) {
+      this.navigate('up');
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown') {
+      this.navigate('down');
+    } else if (event.key === 'ArrowUp') {
+      this.navigate('up');
+    }
+  }
+
+  private navigate(direction: 'up' | 'down') {
+    if (direction === 'up') {
       this.router.navigate(['/top-tracks-popularity']);
+    } else if (direction === 'down') {
+      this.router.navigate(['/track-characteristics']);
     }
   }
 

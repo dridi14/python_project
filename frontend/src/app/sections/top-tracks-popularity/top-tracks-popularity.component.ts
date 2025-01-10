@@ -1,16 +1,17 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
+import { HttpClientModule } from '@angular/common/http';
 import { SpotifyService } from '../../services/spotify.service';
+import { MenuComponent } from '../../menu/menu.component';
 
 @Component({
   selector: 'app-top-tracks-popularity',
   standalone: true,
   templateUrl: './top-tracks-popularity.component.html',
   styleUrls: ['./top-tracks-popularity.component.css'],
-  imports: [CommonModule, RouterModule, HttpClientModule], // Include HttpClientModule
-  providers: [SpotifyService], // Add the service as a provider
+  imports: [CommonModule, RouterModule, HttpClientModule, MenuComponent],
+  providers: [SpotifyService],
 })
 export class TopTracksPopularityComponent implements OnInit {
   tracks: any[] = [];

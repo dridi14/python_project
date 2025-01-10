@@ -1,0 +1,84 @@
+.menu-container {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+.line {
+  position: absolute;
+  width: 4px;
+  height: calc(100% - 40px);
+  background-color: #ddd;
+  z-index: -1;
+  top: 20px;
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-list li {
+  position: relative;
+  margin: 20px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+.menu-point {
+  width: 20px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.menu-point:hover {
+  background-color: #1db954;
+}
+
+.menu-list li.active .menu-point {
+  background-color: rgb(219, 201, 179);
+  transform: scale(1.2);
+}
+
+.submenu {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  color: #555;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.menu-point:hover + .submenu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-list li:first-child .line {
+  top: 20px; /* Start just below the first point */
+  height: calc(100% - 20px); /* Adjust to exclude the first point */
+}
+
+.menu-list li:last-child .line {
+  height: calc(100% - 40px); /* Adjust to exclude the last point */
+}
+
+.menu-list li.active:hover .submenu {
+  visibility: hidden; /* Don't show submenu for active point */
+}

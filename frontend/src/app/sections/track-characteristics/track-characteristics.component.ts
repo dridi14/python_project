@@ -4,6 +4,7 @@ import { Chart, registerables } from 'chart.js';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+import { MenuComponent } from '../../menu/menu.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './track-characteristics.component.html',
   styleUrls: ['./track-characteristics.component.css'],
   providers: [SpotifyService],
-  imports: [CommonModule, HttpClientModule, RouterModule],
+  imports: [CommonModule, HttpClientModule, RouterModule, MenuComponent],
 })
 export class TrackCharacteristicsComponent implements OnInit {
   chart!: Chart;

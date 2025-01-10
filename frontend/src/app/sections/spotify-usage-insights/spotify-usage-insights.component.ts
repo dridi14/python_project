@@ -3,6 +3,8 @@ import { SpotifyService } from '../../services/spotify.service';
 import { Chart, registerables } from 'chart.js';
 import { HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+import { MenuComponent } from '../../menu/menu.component';
+
 
 
 @Component({
@@ -11,7 +13,7 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './spotify-usage-insights.component.html',
   styleUrls: ['./spotify-usage-insights.component.css'],
   providers: [SpotifyService],
-  imports: [HttpClientModule, RouterModule],
+  imports: [HttpClientModule, RouterModule, MenuComponent],
 })
 export class SpotifyUsageInsightsComponent implements OnInit {
   deviceChart!: Chart;

@@ -4,6 +4,7 @@ import { Chart, registerables } from 'chart.js';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { MenuComponent } from '../../menu/menu.component';
 
 @Component({
   selector: 'app-favorite-genres-content',
@@ -11,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './favorite-genres-content.component.html',
   styleUrls: ['./favorite-genres-content.component.css'],
   providers: [SpotifyService],
-  imports: [RouterModule, CommonModule, HttpClientModule],
+  imports: [RouterModule, CommonModule, HttpClientModule, MenuComponent],
 })
 export class FavoriteGenresContentComponent implements OnInit {
   chart!: Chart;
