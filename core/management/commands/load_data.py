@@ -9,9 +9,17 @@ def get_data():
         if file.endswith(".csv"):
             df = pd.read_csv(os.path.join(path, file))
             break
-    print(len(df))
     # save to a csv file
     df.to_csv("core/data/spotify_tracks.csv", index=False)
+
+    ## behaviour data set
+    path = kagglehub.dataset_download("meeraajayakumar/spotify-user-behavior-dataset")
+    for file in os.listdir(path):
+        if file.endswith(".xlsx"):
+            df = pd.read_excel(os.path.join(path, file))
+            break
+    # save to a csv file
+    df.to_csv("core/data/spotify_user_behavior.csv", index=False)
 
 class Command(BaseCommand):
     help = 'Load data from Kaggle'

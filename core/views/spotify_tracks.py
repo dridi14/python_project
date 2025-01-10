@@ -46,7 +46,7 @@ class SpotifyTrackerViewSet(ViewSet):
             return Response(filtered_data.to_dict(orient='records'))
         except Exception as e:
             return Response({"error": str(e)}, status=500)
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], url_path="popularity-trends")
     def popularity_trends(self, request):
         """Endpoint for Popularity Trends"""
         try:
@@ -55,7 +55,7 @@ class SpotifyTrackerViewSet(ViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get"], url_path="genre-language")
     def genre_language(self, request):
         """Endpoint for Genre and Language Stats"""
         top_n = int(request.GET.get('top_n', 5))
@@ -90,7 +90,7 @@ class SpotifyTrackerViewSet(ViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=500)
 
-    def apply_filters(df, filters):
+    def apply_filters(self, df, filters):
         # Year Filter
         if 'year' in filters:
             year_filter = filters['year']

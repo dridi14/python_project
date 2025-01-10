@@ -1,0 +1,23 @@
+<div class="container">
+  <h1>Subscription Insights by Gender</h1>
+
+  <div class="chart-container">
+    <canvas id="barChart"></canvas>
+  </div>
+
+  <h2>Detailed Percentages</h2>
+  <ul class="demographics-list">
+    <li>
+      Male Paid: {{ malePaidPercentage.toFixed(2) }}%
+    </li>
+    <li>
+      Male Unpaid: {{ maleUnpaidPercentage.toFixed(2) }}%
+    </li>
+    <li>
+      Female Paid: {{ femalePaidPercentage.toFixed(2) }}%
+    </li>
+    <li>
+      Female Unpaid: {{ femaleUnpaidPercentage.toFixed(2) }}%
+    </li>
+  </ul>
+</div>

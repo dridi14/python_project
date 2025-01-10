@@ -1,0 +1,15 @@
+<div class="top-tracks-container">
+  <div *ngFor="let track of displayedTracks" class="track">
+    <div class="artwork">
+      <img [src]="track.artwork_url" [alt]="track.track_name" />
+    </div>
+    <div class="track-details">
+      <h2>{{ track.track_name }}</h2>
+      <h3>{{ track.artist_name }}</h3>
+      <div class="popularity-bar">
+        <div class="popularity-fill" [style.width.%]="track.popularity"></div>
+      </div>
+      <p>Most Popular tracks for spotify users: {{ track.popularity }}%</p>
+    </div>
+  </div>
+</div>

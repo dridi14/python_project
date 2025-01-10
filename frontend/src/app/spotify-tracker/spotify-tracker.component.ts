@@ -26,6 +26,7 @@ Chart.register(
   Tooltip,
   Legend
 );
+
 @Component({
   selector: 'app-spotify-tracker',
   standalone: true,
@@ -45,12 +46,7 @@ Chart.register(
 export class SpotifyTrackerComponent implements OnInit {
   form: FormGroup;
   data: any[] = [];
-  displayedColumns: string[] = [
-    'track_name',
-    'artist_name',
-    'year',
-    'popularity',
-  ];
+  displayedColumns: string[] = ['track_name', 'artist_name', 'year', 'popularity'];
   chart: any;
 
   constructor(private http: HttpClient, private fb: FormBuilder) {
@@ -79,7 +75,6 @@ export class SpotifyTrackerComponent implements OnInit {
       .get<any[]>('http://localhost:8000/api/spotify-tracker/', { params })
       .subscribe(
         (response) => {
-          console.log(response);
           this.data = response;
           this.updateChart();
         },
@@ -88,32 +83,30 @@ export class SpotifyTrackerComponent implements OnInit {
   }
 
   updateChart() {
-    if (this.chart) {this.chart.dispose();}
+    if (this.chart) this.chart.destroy(); // Destroy existing chart
     const ctx = (
       document.getElementById('spotifyChart') as HTMLCanvasElement
     ).getContext('2d');
 
-    const popularityDataset = {
-      label: 'Popularity',
-      data: this.data.map((track) => track.popularity),
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1,
-    };
-
-    const danceabilityDataset = {
-      label: 'Danceability',
-      data: this.data.map((track) => track.danceability),
-      backgroundColor: 'rgba(153, 102, 255, 0.2)',
-      borderColor: 'rgba(153, 102, 255, 1)',
-      borderWidth: 1,
-    };
+    // Add gradient color for better visuals
+    const gradient = (<any>ctx).createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(75, 192, 192, 1)');
+    gradient.addColorStop(1, 'rgba(75, 192, 192, 0.2)');
 
     this.chart = new Chart(<any>ctx, {
       type: 'bar',
       data: {
         labels: this.data.map((track) => track.track_name), // X-axis
-        datasets: [popularityDataset, danceabilityDataset], // Multiple datasets
+        datasets: [
+          {
+            label: 'Popularity',
+            data: this.data.map((track) => track.popularity),
+            backgroundColor: gradient,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(75, 192, 192, 0.7)',
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -121,15 +114,24 @@ export class SpotifyTrackerComponent implements OnInit {
           legend: { display: true },
           tooltip: {
             callbacks: {
-              label: function (tooltipItem) {
-                return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+              label: (tooltipItem) => {
+                const track = this.data[tooltipItem.dataIndex];
+                return `Artist: ${track.artist_name}, Popularity: ${track.popularity}`;
               },
             },
           },
         },
+        onClick: (event, elements) => {
+          if (elements.length > 0) {
+            const index = elements[0].index;
+            const track = this.data[index];
+            alert(`Track: ${track.track_name}\nArtist: ${track.artist_name}`);
+            // Add dynamic filtering logic here
+          }
+        },
         scales: {
           x: { title: { display: true, text: 'Track Name' } },
-          y: { title: { display: true, text: 'Metrics' }, beginAtZero: true },
+          y: { title: { display: true, text: 'Popularity' }, beginAtZero: true },
         },
       },
     });
