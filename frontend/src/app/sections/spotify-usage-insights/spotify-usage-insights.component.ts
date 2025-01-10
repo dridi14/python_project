@@ -4,8 +4,7 @@ import { Chart, registerables } from 'chart.js';
 import { HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { MenuComponent } from '../../menu/menu.component';
-
-
+import { BaseComponent } from '../../base/base.component';
 
 @Component({
   selector: 'app-spotify-usage-insights',
@@ -15,7 +14,7 @@ import { MenuComponent } from '../../menu/menu.component';
   providers: [SpotifyService],
   imports: [HttpClientModule, RouterModule, MenuComponent],
 })
-export class SpotifyUsageInsightsComponent implements OnInit {
+export class SpotifyUsageInsightsComponent extends BaseComponent implements OnInit {
   deviceChart!: Chart;
   devices: any[] = [];
 
@@ -24,14 +23,13 @@ export class SpotifyUsageInsightsComponent implements OnInit {
     private router: Router
   ) {
     Chart.register(...registerables);
+    super();
   }
 
-  @HostListener('window:wheel', ['$event'])
-  onWheel(event: WheelEvent) {
-    if (event.deltaY > 0) {
-      // Scroll down
+  override navigate(direction: 'up' | 'down') {
+    if (direction === 'down') {
       this.router.navigate(['/favorite-genres']);
-    } else if (event.deltaY < 0) {
+    } else {
       this.router.navigate(['/track-characteristics']);
     }
   }

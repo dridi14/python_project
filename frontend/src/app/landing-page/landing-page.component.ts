@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MenuComponent } from '../menu/menu.component';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-landing-page',
@@ -10,13 +11,13 @@ import { MenuComponent } from '../menu/menu.component';
   styleUrls: ['./landing-page.component.css'],
   imports: [CommonModule, RouterModule, MenuComponent],
 })
-export class LandingPageComponent {
-  constructor(private router: Router) {}
+export class LandingPageComponent extends BaseComponent {
+  constructor(private router: Router) {
+    super();
+  }
 
-  @HostListener('window:wheel', ['$event'])
-  onWheel(event: WheelEvent) {
-    if (event.deltaY > 0) {
-      // Scroll down
+  override navigate(direction: 'up' | 'down') {
+    if (direction === 'down') {
       this.router.navigate(['/top-tracks-popularity']);
     }
   }

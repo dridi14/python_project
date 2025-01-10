@@ -6,6 +6,7 @@ import { Chart, registerables } from 'chart.js';
 import { Router, RouterModule } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 import { MenuComponent } from '../../menu/menu.component';
+import { BaseComponent } from '../../base/base.component';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { MenuComponent } from '../../menu/menu.component';
   imports: [CommonModule, HttpClientModule, RouterModule, MenuComponent],
   providers: [SpotifyService],
 })
-export class YearlyTrendsComponent implements OnInit {
+export class YearlyTrendsComponent extends BaseComponent implements OnInit {
   chart!: Chart;
   years: number[] = [];
   averagePopularity: number[] = [];
@@ -28,27 +29,10 @@ export class YearlyTrendsComponent implements OnInit {
       private router: Router,
       private viewportScroller: ViewportScroller) {
     Chart.register(...registerables);
+    super();
   }
 
-  @HostListener('window:wheel', ['$event'])
-  onWheel(event: WheelEvent) {
-    if (event.deltaY > 0) {
-      this.navigate('down');
-    } else if (event.deltaY < 0) {
-      this.navigate('up');
-    }
-  }
-
-  @HostListener('window:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'ArrowDown') {
-      this.navigate('down');
-    } else if (event.key === 'ArrowUp') {
-      this.navigate('up');
-    }
-  }
-
-  private navigate(direction: 'up' | 'down') {
+  override navigate(direction: 'up' | 'down') {
     if (direction === 'up') {
       this.router.navigate(['/top-tracks-popularity']);
     } else if (direction === 'down') {

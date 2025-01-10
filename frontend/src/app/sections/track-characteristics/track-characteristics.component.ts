@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { MenuComponent } from '../../menu/menu.component';
-
+import { BaseComponent } from '../../base/base.component';
 
 @Component({
   selector: 'app-track-characteristics',
@@ -15,7 +15,7 @@ import { MenuComponent } from '../../menu/menu.component';
   providers: [SpotifyService],
   imports: [CommonModule, HttpClientModule, RouterModule, MenuComponent],
 })
-export class TrackCharacteristicsComponent implements OnInit {
+export class TrackCharacteristicsComponent extends BaseComponent implements OnInit {
   chart!: Chart;
   totalMale: number = 0;
   totalFemale: number = 0;
@@ -23,22 +23,19 @@ export class TrackCharacteristicsComponent implements OnInit {
   maleUnpaidPercentage: number = 0;
   femalePaidPercentage: number = 0;
   femaleUnpaidPercentage: number = 0;
-  lastScrollTime: number = 0;
 
   constructor(private spotifyService: SpotifyService, private router: Router) {
     Chart.register(...registerables);
+    super();
   }
 
-  @HostListener('window:wheel', ['$event'])
-    onWheel(event: WheelEvent) {
-      if (Date.now() - this.lastScrollTime < 1000) return;
-      this.lastScrollTime = Date.now();
-      if (event.deltaY > 0) {
-        this.router.navigate(['/spotify-usage-insights']);
-      } else if (event.deltaY < 0) {
-        this.router.navigate(['/yearly-trends']);
-      }
+  override navigate(direction: 'up' | 'down') {
+    if (direction === 'down') {
+      this.router.navigate(['/spotify-usage-insights']);
+    } else if (direction === 'up') {
+      this.router.navigate(['/yearly-trends']);
     }
+  }
 
   ngOnInit(): void {
     this.fetchDemographicData();

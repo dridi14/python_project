@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { SpotifyService } from '../../services/spotify.service';
 import { MenuComponent } from '../../menu/menu.component';
+import { BaseComponent } from '../../base/base.component';
 
 @Component({
   selector: 'app-top-tracks-popularity',
@@ -13,13 +14,14 @@ import { MenuComponent } from '../../menu/menu.component';
   imports: [CommonModule, RouterModule, HttpClientModule, MenuComponent],
   providers: [SpotifyService],
 })
-export class TopTracksPopularityComponent implements OnInit {
+export class TopTracksPopularityComponent extends BaseComponent implements OnInit {
   tracks: any[] = [];
   displayedTracks: any[] = [];
   currentTrackIndex: number = 0;
-  lastScrollTime: number = 0;
 
-  constructor(private router: Router, private spotifyService: SpotifyService) {}
+  constructor(private router: Router, private spotifyService: SpotifyService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.spotifyService.getFilteredData({ top: 'true', top_column: 'popularity', top_n: '5' }).subscribe(
@@ -43,18 +45,15 @@ export class TopTracksPopularityComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  @HostListener('window:wheel', ['$event'])
-  onWheel(event: WheelEvent) {
-    if (Date.now() - this.lastScrollTime < 200) return;
-    this.lastScrollTime = Date.now();
-    if (event.deltaY > 0) {
+  override navigate(direction: 'up' | 'down') {
+    if (direction === 'down') {
       if (this.currentTrackIndex < this.tracks.length - 1) {
         this.currentTrackIndex++;
         this.displayedTracks = [this.tracks[this.currentTrackIndex]];
       } else if (this.currentTrackIndex === this.tracks.length - 1) {
         this.navigateToNextPage();
       }
-    } else if (event.deltaY < 0) {
+    } else {
       if (this.currentTrackIndex > 0) {
         this.currentTrackIndex--;
         this.displayedTracks = [this.tracks[this.currentTrackIndex]];
