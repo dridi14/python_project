@@ -45,7 +45,7 @@ export class TopTracksPopularityComponent implements OnInit {
 
   @HostListener('window:wheel', ['$event'])
   onWheel(event: WheelEvent) {
-    if (Date.now() - this.lastScrollTime < 1000) return;
+    if (Date.now() - this.lastScrollTime < 200) return;
     this.lastScrollTime = Date.now();
     if (event.deltaY > 0) {
       if (this.currentTrackIndex < this.tracks.length - 1) {
